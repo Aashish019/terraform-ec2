@@ -44,6 +44,6 @@ jobs:
             - name: Terraform plan
               run: |
                   terraform plan -var 'prj_ami_id=${{ inputs.instance-ami-id}}' \
-                  -var 'prj_instance_name=${{ inputs.prj_instance_name}}' \
-                  -var 'prj_instance_type=${{inputs.prj_instance_type}}' \
-                  -var 'prj_key_name=${{inputs.prj_key_name}}'
+                  -var 'prj_instance_name=${{ inputs.instance-name}}' \
+                  -var 'prj_instance_type=${{inputs.instance-type}}' \
+                  -var 'prj_key_name=${{inputs.key-name}}'
