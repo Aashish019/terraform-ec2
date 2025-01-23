@@ -1,0 +1,49 @@
+name: automatic ec2
+on:
+    workflow_dispatch:
+        inputs:
+            instance-type:
+                description: "instance type"
+                required: true
+                type: string
+                default: "t2.micro"
+            instance-name:
+                description: "instance name"
+                required: true
+                type: string
+                default: "my-instance"
+            instance-ami-id:
+                description: "ami id"
+                required: true
+                type: string
+                default: "ami-0df8c184d5f6ae949"
+            key-name:
+                description: "Key name"
+                required: true
+                type: string
+jobs:
+    create_ec2:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Setup terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: 1.9.0
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1
+            - name: list
+              run: ls -la
+            - name: Terraform init
+              run: terraform init
+            - name: Terraform plan
+              run: |
+                  terraform plan -var 'prj_ami_id=${{ inputs.instance-ami-id}}' \
+                  -var 'prj_instance_name=${{ inputs.prj_instance_name}}' \
+                  -var 'prj_instance_type=${{inputs.prj_instance_type}}' \
+                  -var 'prj_key_name=${{inputs.prj_key_name}}'
