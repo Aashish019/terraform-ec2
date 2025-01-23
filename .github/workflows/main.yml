@@ -47,3 +47,9 @@ jobs:
                   -var 'prj_instance_name=${{ inputs.instance-name}}' \
                   -var 'prj_instance_type=${{inputs.instance-type}}' \
                   -var 'prj_key_name=${{inputs.key-name}}'
+            - name: Terraform apply
+              run: |
+                  terraform apply -var 'prj_ami_id=${{ inputs.instance-ami-id}}' \
+                  -var 'prj_instance_name=${{ inputs.instance-name}}' \
+                  -var 'prj_instance_type=${{inputs.instance-type}}' \
+                  -var 'prj_key_name=${{inputs.key-name}}' --auto-approve
